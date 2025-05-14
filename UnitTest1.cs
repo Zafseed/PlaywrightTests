@@ -1,6 +1,12 @@
-﻿namespace PlaywrightTests;
+﻿using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using Microsoft.Playwright;
+using Microsoft.Playwright.NUnit;
+using NUnit.Framework;
 
-public class Tests
+namespace PlaywrightTests;
+
+public class Tests : PageTest
 {
     [SetUp]
     public void Setup()
@@ -8,8 +14,12 @@ public class Tests
     }
 
     [Test]
-    public void Test1()
+    public async Task Test1()
     {
-        Assert.Pass();
+        await Page.GotoAsync("https://playwright.dev");
+
+        await Page.GetByRole(AriaRole.Link, new() { Name = "Get started" }).ClickAsync();
+
+        await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = "Installation" })).ToBeVisibleAsync();
     }
 }
